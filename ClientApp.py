@@ -28,7 +28,7 @@ class ClientApp(Tk):
 
 
 class MainView(Frame):
-    run_algorithm_url = 'http://localhost:5000/run_algorithm'  # 'http://192.168.1.42:5000/run_algorithm'
+    run_algorithm_url = 'http://localhost:5000/run_algorithm'
 
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -69,7 +69,7 @@ class MainView(Frame):
 
 
 class UploadFileView(Frame):
-    upload_url = 'http://localhost:5000/upload'  # 'http://192.168.1.42:5000/upload'
+    upload_url = 'http://localhost:5000/upload'
 
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -148,9 +148,9 @@ class RedirectOutputText:
 
 
 class TrainingFileView(Frame):
-    uncertain_pairs_url = 'http://localhost:5000/files/uncertain_pairs_file'  # 'http://192.168.1.42:5000/files
+    uncertain_pairs_url = 'http://localhost:5000/files/uncertain_pairs_file'
     # /uncertain_pairs_file'
-    upload_url = 'http://localhost:5000/upload'  # 'http://192.168.1.42:5000/upload'
+    upload_url = 'http://localhost:5000/upload'
 
     def __init__(self, master):
         """Constructor"""
