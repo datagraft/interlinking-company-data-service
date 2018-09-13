@@ -149,7 +149,6 @@ class RedirectOutputText:
 
 class TrainingFileView(Frame):
     uncertain_pairs_url = 'http://localhost:5000/files/uncertain_pairs_file'
-    # /uncertain_pairs_file'
     upload_url = 'http://localhost:5000/upload'
 
     def __init__(self, master):
