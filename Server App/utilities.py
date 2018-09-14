@@ -3,6 +3,55 @@ import psycopg2.extras
 import pandas as pd
 import numpy as np
 
+def search_company_by_name(info_db, company_name):
+    # create database connection
+    db_connection = create_database_connection(info_db)
+    db_cursor = db_connection.cursor()
+
+
+    table_names = get_all_table_names_from_schema('public')
+
+    tmp_result = {}
+    for table_name in table_names:
+
+        cursor.execute("SELECT * FROM " + table_name + " WHERE legal_name ILIKE '%' || " + repr(name) + " || '%';")
+
+        for row in cursor:
+            if tmp_result.get(table_name):
+                # add another row to the list
+                tmp_result[table_name].append(row)
+            else:
+                # create list with the first row
+                tmp_result[table_name] = [row]
+
+    result = tmp_result.copy()
+
+    for table_name_key, extracted_rows_list in tmp_result.items():
+        table_names.remove(table_name_key)
+        
+        for row in extracted_rows_list:
+            cluster_id = row['cluster_id']
+            
+            for table_name in table_names:
+                cursor.execute("SELECT * FROM " + table_name + " WHERE cluster_id = " + str(cluster_id) + ";")
+
+                for new_row in cursor:
+                    if not new_row in tmp_result[table_name]:
+                        result[table_name].append(new_row)
+
+        table_names.append(table_name_key)
+
+    fields_to_be_deleted = ['company_id', 'cluster_id', 'link_score']
+    for table_name_key, extracted_rows_list in tmp_result.items():
+        for row in extracted_rows_list:
+            for field_to_be_deleted in fields_to_be_deleted:
+                del row[field_to_be_deleted]
+    
+    # close the database connection 
+    db_cursor.close()
+    db_connection.close()
+
+    return result
 
 def get_maximum_cluster_id_from_backbone_index_table(info_db):
     """
