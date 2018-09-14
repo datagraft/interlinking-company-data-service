@@ -91,11 +91,11 @@ def create_uncertain_pairs_file():
     backbone.execute_jupyter_notebook_cells(idx_first_cell=0, idx_last_cell=20)
 
 
-@app.route('/search/company/name/<company_name>', methods=['POST'])
+@app.route('/search/company/name/<company_name>', methods=['GET'])
 def search_by_company_name(company_name):
     # object that will do all the work
     backbone = Backbone()
-
+    
     return backbone.search_company_by_name_and_return_serialized_result(company_name)
 
 
