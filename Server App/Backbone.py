@@ -1,6 +1,9 @@
 import utilities
 import simplejson as json
 import pandas as pd
+import pickle
+
+from io import BytesIO
 
 from werkzeug.utils import secure_filename
 
@@ -14,7 +17,7 @@ class Backbone:
     tmp_file_2_name = 'tmp_input_file_2.csv'
 
     # jupyter notebook file name, which contains the Dedupe algorithm
-    dedupe_jupyter_nb_name = 'dedupe_linking_data.ipynb'
+    dedupe_jupyter_nb_name = 'dedupe_interlinking_data.ipynb'
 
     training_file_name_created_by_client = 'training_file.json'
 
@@ -41,7 +44,7 @@ class Backbone:
         # read the data from the configuration file
         with open(self.configuration_file_name, 'r') as config_file:
             self.data_from_config_file = json.load(config_file)
-
+        
     def __set_input_file_1_name(self):
         self.input_file_1 = secure_filename(self.data_from_config_file['input_file_1'])
 
@@ -58,14 +61,14 @@ class Backbone:
             self.input_file_2 = self.tmp_file_2_name
 
     def __set_training_file_name(self):
-        if self.data_from_config_file['create_training_file_by_client']:
+        if self.data_from_config_file['training']['create_training_file_by_client']:
             self.training_file_name = self.training_file_name_created_by_client
         else:
-            self.training_file_name = secure_filename(self.data_from_config_file['training_file'])
+            self.training_file_name = secure_filename(self.data_from_config_file['training']['training_file'])
 
     def __set_settings_file_name(self):
-        if self.data_from_config_file['settings_file']:
-            self.settings_file_name = secure_filename(self.data_from_config_file['settings_file'])
+        if self.data_from_config_file['training']['settings_file']:
+            self.settings_file_name = secure_filename(self.data_from_config_file['training']['settings_file'])
         else:
             self.settings_file_name = None
 
@@ -95,8 +98,8 @@ class Backbone:
         self.config_data_for_dedupe.pop('jurisdiction', None)
 
         self.config_data_for_dedupe['input_file_1'] = self.input_file_1
-        self.config_data_for_dedupe['training_file'] = self.training_file_name
-        self.config_data_for_dedupe['settings_file'] = self.settings_file_name
+        self.config_data_for_dedupe['training']['training_file'] = self.training_file_name
+        self.config_data_for_dedupe['training']['settings_file'] = self.settings_file_name
 
         if self.is_tmp_file_used():
             # write in Dedupe's configuration file the name of the file containing the second dataset
@@ -164,4 +167,12 @@ class Backbone:
             # N.B.: every LOC is terminated with a new line character '\n' --> 
             # merging them won't produce an error
             result = self.jupyter_notebook_data["cells"][idx_cell]["source"]
-            exec(''.join(result))
+            exec(''.join(result), locals())
+
+    def search_company_by_name_and_return_serialized_result(company_name):
+        buff = BytesIO()
+
+        pickle.dump(utilities.search_company_by_name(self.data_from_config_file['database_config'], company_name), buff)
+
+        return buff
+    
