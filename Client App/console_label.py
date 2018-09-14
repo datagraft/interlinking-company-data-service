@@ -1,16 +1,18 @@
 import pickle
 import simplejson as json
+from io import BytesIO
 
 
 class ConsoleLabel:
 
     training_file_name = "training_file.json"
 
-    def __init__(self, path_to_uncertain_pairs_file):
+    def __init__(self, uncertain_pairs_stream):
         self.labeled_examples = {'distinct': [], 'match': []}
 
-        with open(path_to_uncertain_pairs_file, "rb") as fp:
-            self.uncertain_pairs = pickle.load(fp)
+        buff = BytesIO(uncertain_pairs_stream)
+
+        self.uncertain_pairs = pickle.load(buff)
 
     def get_uncertain_pair(self):
 

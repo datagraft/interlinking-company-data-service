@@ -3,15 +3,19 @@ import os
 
 from tkinter import Frame, Tk, BOTH, Button, Label, messagebox, scrolledtext, Entry, END
 from tkinter import filedialog
+from tkinter.ttk import Combobox
 
 import requests
+import pickle
 
 from console_label import ConsoleLabel
+from io import BytesIO
 
 
 class ClientApp(Tk):
 
     def __init__(self):
+
         Tk.__init__(self)
         self._frame = None
         self.switch_frame(MainView)
@@ -33,32 +37,36 @@ class MainView(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
 
         self.master.title("Backbone")
-        self.master.geometry("300x130")
+        self.master.geometry("300x150")
 
         self.pack(fill=BOTH, expand=1)
 
-        self.upload_file = Button(self, text="Upload file", command=self.uploadFile)
-        self.upload_file.place(x=90, y=10)
+        self.btn_upload_file = Button(self, text="Upload file", command=self.upload_file)
+        self.btn_upload_file.place(x=90, y=10)
 
-        self.create_training_file = Button(self, text="Create & upload training file", command=self.createTrainingFile)
-        self.create_training_file.place(x=30, y=40)
+        self.btn_create_training_file = Button(self, text="Create & upload training file", command=self.create_training_file)
+        self.btn_create_training_file.place(x=30, y=40)
 
-        self.run_algorithm = Button(self, text="Run algorithm", command=self.runAlgorithm)
-        self.run_algorithm.place(x=80, y=70)
+        self.btn_run_algorithm = Button(self, text="Run algorithm", command=self.run_algorithm)
+        self.btn_run_algorithm.place(x=80, y=70)
 
-    def uploadFile(self):
+        self.btn_view_results = Button(self, text="View Results", command=self.view_results)
+        self.btn_view_results.place(x=85, y=100)
+
+    def upload_file(self):
         self.master.switch_frame(UploadFileView)
 
-    def createTrainingFile(self):
+    def create_training_file(self):
         self.master.switch_frame(TrainingFileView)
 
-    def runAlgorithm(self):
-        messagebox.showinfo("Information", "Be patient! It will take a while... (Press OK to really start the algorithm :)")
+    def run_algorithm(self):
+        messagebox.showinfo("Information",
+                            "Be patient! It will take a while... (Press OK to really start the algorithm :)")
 
         r = requests.post(self.run_algorithm_url)
 
@@ -67,6 +75,9 @@ class MainView(Frame):
         else:
             messagebox.showerror("Error", "The algorithm encountered errors!")
 
+    def view_results(self):
+        self.master.switch_frame(ResultsView)
+
 
 class UploadFileView(Frame):
     upload_url = 'http://localhost:5000/upload'
@@ -74,31 +85,31 @@ class UploadFileView(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
 
         self.master.title("Upload file")
         self.master.geometry("300x200")
 
         self.pack(fill=BOTH, expand=1)
 
-        self.select_file = Button(self, text="Select file", command=self.onOpen)
-        self.select_file.place(x=80, y=50)
+        self.btn_select_file = Button(self, text="Select file", command=self.on_open)
+        self.btn_select_file.place(x=80, y=50)
 
         self.selected_file_name = Label(self, text="<Selected file name>")
         self.selected_file_name.place(x=60, y=90)
 
-        self.upload_file = Button(self, text="Upload file", command=self.uploadFile)
-        self.upload_file.place(x=80, y=130)
+        self.btn_upload_file = Button(self, text="Upload file", command=self.upload_file)
+        self.btn_upload_file.place(x=80, y=130)
 
-        self.back = Button(self, text="Back", command=self.goBack)
-        self.back.place(x=10, y=10)
+        self.btn_back = Button(self, text="Back", command=self.go_back)
+        self.btn_back.place(x=10, y=10)
 
     def __set_full_path_of_file(self, value):
         self.full_path_of_file = value
 
-    def onOpen(self):
+    def on_open(self):
 
         ftypes = [('CSV', '.csv'), ('JSON', '.json'), ('All files', '*')]
         dlg = filedialog.Open(self, filetypes=ftypes)
@@ -113,7 +124,7 @@ class UploadFileView(Frame):
             self.selected_file_name.configure(text="<Selected file name>")
             self.__set_full_path_of_file(None)
 
-    def uploadFile(self):
+    def upload_file(self):
         try:
             with open(self.full_path_of_file, 'rb') as f:
                 r = requests.post(self.upload_url, files={'file': f})
@@ -130,7 +141,7 @@ class UploadFileView(Frame):
             # no file was selected
             pass
 
-    def goBack(self):
+    def go_back(self):
         self.master.switch_frame(MainView)
 
 
@@ -155,9 +166,9 @@ class TrainingFileView(Frame):
         """Constructor"""
         Frame.__init__(self, master)
 
-        self.initUI()
+        self.init_UI()
 
-    def initUI(self):
+    def init_UI(self):
 
         self.master.title("Create and upload training file")
         self.master.geometry('400x400')
@@ -171,22 +182,21 @@ class TrainingFileView(Frame):
         sys.stdout = RedirectOutputText(self.text_area)
 
         # get the uncertain pairs file from server
-        self.getUncertainPairsFile()
 
-        self.console_label = ConsoleLabel(os.getcwd() + "/uncertain_pairs_file")
+        self.console_label = ConsoleLabel(self.get_uncertain_pairs_file())
         self.current_record_pair = self.console_label.get_uncertain_pair()
 
-        self.btn_next = Button(self, text="Next", bg="green", command=self.getInput)
+        self.btn_next = Button(self, text="Next", bg="green", command=self.get_input)
         self.btn_next.pack()
 
-        self.back = Button(self, text="Back", command=self.goBack)
+        self.back = Button(self, text="Back", command=self.go_back)
         self.back.pack()
 
-    def goBack(self):
+    def go_back(self):
 
         self.master.switch_frame(MainView)
 
-    def getInput(self):
+    def get_input(self):
         if self.console_label is None:
             self.text_area.delete('1.0', END)
             print("The training has finished and the training file was created and sent to the server! Go Back.")
@@ -204,9 +214,9 @@ class TrainingFileView(Frame):
         self.console_label.label_record_pair(user_input, self.current_record_pair)
 
         if user_input == 'f':
-            self.uploadTrainingFile()
+            self.upload_training_file()
             self.current_record_pair = None
-            self.console_label = None
+            self .console_label = None
             self.text_area.delete('1.0', END)
             return
 
@@ -214,16 +224,15 @@ class TrainingFileView(Frame):
 
         self.current_record_pair = self.console_label.get_uncertain_pair()
 
-    def getUncertainPairsFile(self):
+    def get_uncertain_pairs_file(self):
         # GET a the uncertain_pairs file
         file_name = 'uncertain_pairs_file'
 
-        with open(file_name, 'wb') as f:
-            r = requests.get(self.uncertain_pairs_url, stream=True)
+        response = requests.get(self.uncertain_pairs_url, stream=True)
 
-            f.write(r.content)
+        return response.content
 
-    def uploadTrainingFile(self):
+    def upload_training_file(self):
         # POST a file
         file_path = os.getcwd() + "/" + self.console_label.training_file_name
 
@@ -232,6 +241,70 @@ class TrainingFileView(Frame):
 
         if r.status_code != requests.codes.ok:
             messagebox.showerror("Error", "The training file could not be uploaded!")
+
+
+class ResultsView(Frame):
+
+    companies_url = "http://localhost:5000/search/company/name/"
+
+    def __init__(self, master):
+        """Constructor"""
+        Frame.__init__(self, master)
+
+        self.init_UI()
+
+    def init_UI(self):
+
+        self.master.title("Search for different companies")
+        self.master.geometry("400x400")
+
+        self.label_combobox = Label(self, text="Search by")
+        self.label_combobox.pack()
+
+        self.combo_searching_options = Combobox(self, state="readonly")
+        self.combo_searching_options['values'] = ("Name",)
+        self.combo_searching_options.pack()
+
+        self.label_input = Label(self, text="Entry the value")
+        self.label_input.pack()
+
+        self.user_input = Entry(self, width=40)
+        self.user_input.pack()
+
+        self.btn_submit = Button(self, text="Submit", command=self.submit)
+        self.btn_submit.pack()
+
+        self.text_area = scrolledtext.ScrolledText(self)
+        self.text_area.pack()
+
+        sys.stdout = RedirectOutputText(self.text_area)
+
+        self.btn_back = Button(self, text="Back", command=self.go_back)
+        self.btn_back.pack()
+
+    def go_back(self):
+        self.master.switch_frame(MainView)
+
+    def submit(self):
+
+        r = requests.get(self.companies_url + self.user_input.get(), stream=True)
+
+        buff = BytesIO(r.content)
+
+        companies = pickle.load(buff)
+
+        self.print_results(companies)
+
+        self.text_area.yview(END)
+
+    def print_results(self, result):
+
+        for key, values in result.items():
+            print(key)
+            for example in values:
+                for field, value in example.items():
+                    print(str(field) + ": " + str(value))
+            print("\n")
 
 
 def main():
