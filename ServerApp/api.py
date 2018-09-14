@@ -92,11 +92,11 @@ def create_uncertain_pairs_file():
 
 
 @app.route('/search/company/name/<company_name>', methods=['POST'])
-    def search_by_company_name(company_name):
-        # object that will do all the work
-        backbone = Backbone()
+def search_by_company_name(company_name):
+    # object that will do all the work
+    backbone = Backbone()
 
-        return backbone.search_company_by_name_and_return_serialized_result(company_name)
+    return backbone.search_company_by_name_and_return_serialized_result(company_name)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
