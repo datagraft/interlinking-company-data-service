@@ -3,8 +3,6 @@ import simplejson as json
 import pandas as pd
 import pickle
 
-from io import BytesIO
-
 from werkzeug.utils import secure_filename
 
 
@@ -169,10 +167,5 @@ class Backbone:
             result = self.jupyter_notebook_data["cells"][idx_cell]["source"]
             exec(''.join(result), locals())
 
-    def search_company_by_name_and_return_serialized_result(company_name):
-        buff = BytesIO()
-
-        pickle.dump(utilities.search_company_by_name(self.data_from_config_file['database_config'], company_name), buff)
-
-        return buff
-    
+    def search_company_by_name_and_return_serialized_result(self, company_name):
+        return pickle.dumps(utilities.search_company_by_name(self.data_from_config_file['database_config'], company_name))
