@@ -261,6 +261,8 @@ class ResultsView(Frame):
         self.label_combobox = Label(self, text="Search by")
         self.label_combobox.pack()
 
+        ##################################################################### TODO get selected box
+
         self.combo_searching_options = Combobox(self, state="readonly")
         self.combo_searching_options['values'] = ("Name",)
         self.combo_searching_options.pack()
@@ -268,6 +270,7 @@ class ResultsView(Frame):
         self.label_input = Label(self, text="Entry the value")
         self.label_input.pack()
 
+        ####################################################################### TODO empty area before submit button
         self.user_input = Entry(self, width=40)
         self.user_input.pack()
 
@@ -286,7 +289,6 @@ class ResultsView(Frame):
         self.master.switch_frame(MainView)
 
     def submit(self):
-
         r = requests.get(self.companies_url + self.user_input.get(), stream=True)
 
         buff = BytesIO(r.content)
