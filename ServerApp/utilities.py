@@ -9,14 +9,14 @@ def search_company_by_name(info_db, company_name):
     db_cursor = db_connection.cursor()
 
 
-    table_names = get_all_table_names_from_schema('public')
+    table_names = get_all_table_names_from_schema(info_db, 'public')
 
     tmp_result = {}
     for table_name in table_names:
 
-        cursor.execute("SELECT * FROM " + table_name + " WHERE legal_name ILIKE '%' || " + repr(name) + " || '%';")
+        db_cursor.execute("SELECT * FROM " + table_name + " WHERE legal_name ILIKE '%' || " + repr(company_name) + " || '%';")
 
-        for row in cursor:
+        for row in db_cursor:
             if tmp_result.get(table_name):
                 # add another row to the list
                 tmp_result[table_name].append(row)
@@ -33,9 +33,9 @@ def search_company_by_name(info_db, company_name):
             cluster_id = row['cluster_id']
             
             for table_name in table_names:
-                cursor.execute("SELECT * FROM " + table_name + " WHERE cluster_id = " + str(cluster_id) + ";")
+                db_cursor.execute("SELECT * FROM " + table_name + " WHERE cluster_id = " + str(cluster_id) + ";")
 
-                for new_row in cursor:
+                for new_row in db_cursor:
                     if not new_row in tmp_result[table_name]:
                         result[table_name].append(new_row)
 
