@@ -20,7 +20,11 @@ class ClientApp(Tk):
         self.switch_frame(MainView)
 
     def switch_frame(self, frame_class):
-        """Destroys current frame and replaces it with a new one."""
+        """
+            Destroys current frame and replaces it with a new one.
+
+            :param frame_class: frame object representing the new frame
+        """
         new_frame = frame_class(self)
 
         if self._frame is not None:
@@ -34,12 +38,17 @@ class MainView(Frame):
     run_algorithm_url = 'http://localhost:5000/run_algorithm'
 
     def __init__(self, master):
+        """
+            Constructor
+        """
         Frame.__init__(self, master)
 
         self.init_ui()
 
     def init_ui(self):
-
+        """
+            This function creates and initializes widgets which are specific for this panel.
+        """
         self.master.title("Backbone")
         self.master.geometry("300x150")
 
@@ -59,12 +68,22 @@ class MainView(Frame):
         self.btn_view_results.place(x=85, y=100)
 
     def upload_file(self):
+        """
+            This function changes the "main" frame to "upload file" frame.
+        """
         self.master.switch_frame(UploadFileView)
 
     def create_training_file(self):
+        """
+            This function changes the "main" frame to "create and upload training file" frame.
+        """
         self.master.switch_frame(TrainingFileView)
 
     def run_algorithm(self):
+        """
+            This function makes a POST request in order to run the main algorithm (jupyter notebook file).
+            It prints in a message box if the algorithm terminated successfully or not.
+        """
         messagebox.showinfo("Information",
                             "Be patient! It will take a while... (Press OK to really start the algorithm :)")
 
@@ -76,6 +95,9 @@ class MainView(Frame):
             messagebox.showerror("Error", "The algorithm encountered errors!")
 
     def view_results(self):
+        """
+            This function changes the "main" frame to "view results" frame.
+        """
         self.master.switch_frame(ResultsView)
 
 
@@ -83,11 +105,17 @@ class UploadFileView(Frame):
     upload_url = 'http://localhost:5000/upload'
 
     def __init__(self, master):
+        """
+            Constructor
+        """
         Frame.__init__(self, master)
 
         self.init_ui()
 
     def init_ui(self):
+        """
+            This function creates and initializes widgets which are specific for this panel.
+        """
 
         self.master.title("Upload file")
         self.master.geometry("300x200")
@@ -107,9 +135,19 @@ class UploadFileView(Frame):
         self.btn_back.place(x=10, y=10)
 
     def __set_full_path_of_file(self, value):
+        """
+            TODO in case of misunderstanding change it Andrei
+            This function sets the path where to upload different files.
+
+
+            :param value: path where to upload files.
+        """
         self.full_path_of_file = value
 
     def on_open(self):
+        """
+             TODO comment Andrei
+        """
 
         ftypes = [('CSV', '.csv'), ('JSON', '.json'), ('All files', '*')]
         dlg = filedialog.Open(self, filetypes=ftypes)
@@ -125,6 +163,9 @@ class UploadFileView(Frame):
             self.__set_full_path_of_file(None)
 
     def upload_file(self):
+        """
+             TODO comment Andrei
+        """
         try:
             with open(self.full_path_of_file, 'rb') as f:
                 r = requests.post(self.upload_url, files={'file': f})
@@ -142,14 +183,21 @@ class UploadFileView(Frame):
             pass
 
     def go_back(self):
+        """
+            This function changes the current frame to the "main" frame.
+        """
         self.master.switch_frame(MainView)
 
 
 class RedirectOutputText:
 
-    def __init__(self, text_ctrl):
-        """Constructor"""
-        self.output = text_ctrl
+    def __init__(self, text_output):
+        """
+            Constructor
+
+            :param text_output : object representing where the text is written
+        """
+        self.output = text_output
 
     def write(self, string):
         self.output.insert(END, string)
@@ -169,6 +217,9 @@ class TrainingFileView(Frame):
         self.init_UI()
 
     def init_UI(self):
+        """
+             This function creates and initializes widgets which are specific for this panel.
+        """
 
         self.master.title("Create and upload training file")
         self.master.geometry('400x400')
@@ -181,8 +232,6 @@ class TrainingFileView(Frame):
 
         sys.stdout = RedirectOutputText(self.text_area)
 
-        # get the uncertain pairs file from server
-
         self.console_label = ConsoleLabel(self.get_uncertain_pairs_file())
         self.current_record_pair = self.console_label.get_uncertain_pair()
 
@@ -193,10 +242,18 @@ class TrainingFileView(Frame):
         self.back.pack()
 
     def go_back(self):
+        """
+            This function changes the current frame to the "main" frame.
+        """
 
         self.master.switch_frame(MainView)
 
     def get_input(self):
+        """
+             This function creates the training file. It gets a new uncertain pair object and it labels the pair with
+             the input from the user. The user can give only these labels: y(yes), n(no), u(unsure), f(finished). In
+             case of f(finished) a new training file is created and uploaded.
+        """
         if self.console_label is None:
             self.text_area.delete('1.0', END)
             print("The training has finished and the training file was created and sent to the server! Go Back.")
@@ -225,15 +282,21 @@ class TrainingFileView(Frame):
         self.current_record_pair = self.console_label.get_uncertain_pair()
 
     def get_uncertain_pairs_file(self):
-        # GET a the uncertain_pairs file
-        file_name = 'uncertain_pairs_file'
+        """
+            This function makes a GET request in order to get the uncertain pairs file.
+
+            :return: an object which represents the response of the request.
+        """
 
         response = requests.get(self.uncertain_pairs_url, stream=True)
 
         return response.content
 
     def upload_training_file(self):
-        # POST a file
+        """
+           This function makes a POST request in order to upload the new created training file.
+        """
+
         file_path = os.getcwd() + "/" + self.console_label.training_file_name
 
         with open(file_path, 'r') as f:
@@ -248,12 +311,17 @@ class ResultsView(Frame):
     combobox_values = ("legal_name", "thoroughfare")
 
     def __init__(self, master):
-        """Constructor"""
+        """
+            Constructor
+        """
         Frame.__init__(self, master)
 
         self.init_UI()
 
     def init_UI(self):
+        """
+             This function creates and initializes widgets which are specific for this panel.
+        """
 
         self.master.title("Search for different companies")
         self.master.geometry("400x400")
@@ -283,9 +351,16 @@ class ResultsView(Frame):
         self.btn_back.pack()
 
     def go_back(self):
+        """
+            This function changes the current frame to the "main" frame.
+        """
         self.master.switch_frame(MainView)
 
     def submit(self):
+        """
+            This function makes a GET request in order to get the queried results. The results represent a
+            dictionary which contains examples from the database.
+        """
 
         if self.text_area.get(1.0, END) is not None:
             self.text_area.delete(1.0, END)
@@ -303,6 +378,12 @@ class ResultsView(Frame):
         self.text_area.yview(END)
 
     def print_results(self, result):
+        """
+            This function prints the results in a pretty way. :)
+
+            :param result: a dictionary object where the key is the provider name and the values are also a dictionary
+                           containing rows from the database represented by the fields and their values
+        """
         if result:
             for key, values in result.items():
                 print(key)
