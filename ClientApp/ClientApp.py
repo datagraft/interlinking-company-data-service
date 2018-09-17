@@ -15,7 +15,6 @@ from io import BytesIO
 class ClientApp(Tk):
 
     def __init__(self):
-
         Tk.__init__(self)
         self._frame = None
         self.switch_frame(MainView)
@@ -49,7 +48,8 @@ class MainView(Frame):
         self.btn_upload_file = Button(self, text="Upload file", command=self.upload_file)
         self.btn_upload_file.place(x=90, y=10)
 
-        self.btn_create_training_file = Button(self, text="Create & upload training file", command=self.create_training_file)
+        self.btn_create_training_file = Button(self, text="Create & upload training file",
+                                               command=self.create_training_file)
         self.btn_create_training_file.place(x=30, y=40)
 
         self.btn_run_algorithm = Button(self, text="Run algorithm", command=self.run_algorithm)
@@ -216,7 +216,7 @@ class TrainingFileView(Frame):
         if user_input == 'f':
             self.upload_training_file()
             self.current_record_pair = None
-            self .console_label = None
+            self.console_label = None
             self.text_area.delete('1.0', END)
             return
 
@@ -244,9 +244,8 @@ class TrainingFileView(Frame):
 
 
 class ResultsView(Frame):
-
-    companies_url = "http://localhost:5000/search/company/name/"
-    combobox_values = ("legal_name","thoroughfare")
+    companies_url = "http://localhost:5000/search/company/"
+    combobox_values = ("legal_name", "thoroughfare")
 
     def __init__(self, master):
         """Constructor"""
@@ -262,8 +261,6 @@ class ResultsView(Frame):
         self.label_combobox = Label(self, text="Search by")
         self.label_combobox.pack()
 
-        ##################################################################### TODO get selected box
-
         self.combo_searching_options = Combobox(self, state="readonly")
         self.combo_searching_options['values'] = self.combobox_values
         self.combo_searching_options.pack()
@@ -271,7 +268,6 @@ class ResultsView(Frame):
         self.label_input = Label(self, text="Entry the value")
         self.label_input.pack()
 
-        ####################################################################### TODO empty area before submit button
         self.user_input = Entry(self, width=40)
         self.user_input.pack()
 
@@ -290,7 +286,13 @@ class ResultsView(Frame):
         self.master.switch_frame(MainView)
 
     def submit(self):
-        r = requests.get(self.companies_url + self.user_input.get(), stream=True)
+
+        if self.text_area.get(1.0, END) is not None:
+            self.text_area.delete(1.0, END)
+
+        value_combo_box = self.combo_searching_options.get()
+
+        r = requests.get(self.companies_url + value_combo_box + "/" + self.user_input.get(), stream=True)
 
         buff = BytesIO(r.content)
 
