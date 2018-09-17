@@ -4,7 +4,6 @@ from io import BytesIO
 
 
 class ConsoleLabel:
-
     training_file_name = "training_file.json"
 
     def __init__(self, uncertain_pairs_stream):

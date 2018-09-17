@@ -3,6 +3,7 @@ import psycopg2.extras
 import pandas as pd
 import numpy as np
 
+
 def search_field_in_db_by_value(info_db, field, value):
     """
     This function searches in all the tables, that contain datasets from providers,
@@ -47,10 +48,10 @@ def search_field_in_db_by_value(info_db, field, value):
 
     for table_name_key, extracted_rows_list in tmp_result.items():
         table_names.remove(table_name_key)
-        
+
         for row in extracted_rows_list:
             cluster_id = row['cluster_id']
-            
+
             for table_name in table_names:
                 
                 db_cursor.execute("SELECT * FROM " + table_name + " WHERE cluster_id = " + str(cluster_id) + ";")
@@ -66,12 +67,13 @@ def search_field_in_db_by_value(info_db, field, value):
         for row in extracted_rows_list:
             for field_to_be_deleted in fields_to_be_deleted:
                 del row[field_to_be_deleted]
-    
+
     # close the database connection 
     db_cursor.close()
     db_connection.close()
 
     return result
+
 
 def get_maximum_cluster_id_from_backbone_index_table(info_db):
     """

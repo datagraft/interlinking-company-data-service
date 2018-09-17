@@ -84,7 +84,7 @@ def run_algorithm():
 def create_uncertain_pairs_file():
     # object that will do all the work
     backbone = Backbone()
-    
+
     if backbone.is_tmp_file_used():
         backbone.extract_data_from_db_and_create_second_input_dataset()
 
@@ -95,14 +95,15 @@ def create_uncertain_pairs_file():
 def search_by_company_name(legal_name):
     # object that will do all the work
     backbone = Backbone()
-    
+
     return backbone.search_field_in_db_by_value_and_return_serialized_result("legal_name", legal_name)
+
 
 @app.route('/search/company/thoroughfare/<thoroughfare>', methods=['GET'])
 def search_by_company_name(thoroughfare):
     # object that will do all the work
     backbone = Backbone()
-    
+
     return backbone.search_field_in_db_by_value_and_return_serialized_result("thoroughfare", thoroughfare)
 
 

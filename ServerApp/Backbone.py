@@ -42,7 +42,7 @@ class Backbone:
         # read the data from the configuration file
         with open(self.configuration_file_name, 'r') as config_file:
             self.data_from_config_file = json.load(config_file)
-        
+
     def __set_input_file_1_name(self):
         self.input_file_1 = secure_filename(self.data_from_config_file['input_file_1'])
 
@@ -168,4 +168,5 @@ class Backbone:
             exec(''.join(result), locals())
 
     def search_field_in_db_by_value_and_return_serialized_result(self, field, value):
-        return pickle.dumps(utilities.search_field_in_db_by_value(self.data_from_config_file['database_config'], field, value))
+        return pickle.dumps(
+            utilities.search_field_in_db_by_value(self.data_from_config_file['database_config'], field, value))
