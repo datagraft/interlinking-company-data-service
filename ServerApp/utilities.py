@@ -8,7 +8,6 @@ def search_company_by_name(info_db, company_name):
     db_connection = create_database_connection(info_db)
     db_cursor = db_connection.cursor()
 
-
     table_names = get_all_table_names_from_schema(info_db, 'public')
 
     tmp_result = {}
