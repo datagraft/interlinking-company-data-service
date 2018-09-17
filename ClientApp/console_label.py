@@ -15,7 +15,6 @@ class ConsoleLabel:
         buff = BytesIO(uncertain_pairs_stream)
 
         self.uncertain_pairs = pickle.load(buff)
-        print(self.uncertain_pairs)
 
     def get_uncertain_pair(self):
         """
@@ -66,11 +65,11 @@ class ConsoleLabel:
         """
 
         if label == 'y':
-            self.labeled_examples['match'].append(record_pair.pop())
+            self.labeled_examples['match'].append(record_pair)
         elif label == 'n':
-            self.labeled_examples['distinct'].append(record_pair.pop())
+            self.labeled_examples['distinct'].append(record_pair)
         elif label == 'u':
-            record_pair.pop()
+            record_pair = ()
         elif label == 'f':
             print('Finished labeling')
             self.__create_uncertain_pairs_file()
