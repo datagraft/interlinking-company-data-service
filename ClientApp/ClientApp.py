@@ -207,7 +207,8 @@ class RedirectOutputText:
 
 
 class TrainingFileView(Frame):
-    uncertain_pairs_url = 'http://localhost:5000/files/uncertain_pairs_file'
+    create_uncertain_pairs_file_url = 'http://localhost:5000/create_uncertain_pairs_file'
+    get_uncertain_pairs_file_url = 'http://localhost:5000/files/uncertain_pairs_file'
     upload_url = 'http://localhost:5000/upload'
 
     def __init__(self, master):
@@ -231,6 +232,8 @@ class TrainingFileView(Frame):
         self.user_input.pack()
 
         sys.stdout = RedirectOutputText(self.text_area)
+
+        self.create_uncertain_pairs_file()
 
         self.console_label = ConsoleLabel(self.get_uncertain_pairs_file())
         self.current_record_pair = self.console_label.get_uncertain_pair()
@@ -281,6 +284,18 @@ class TrainingFileView(Frame):
 
         self.current_record_pair = self.console_label.get_uncertain_pair()
 
+    def create_uncertain_pairs_file(self):
+        """
+            This function makes a POST request in order to create the uncertain pairs file.
+        """
+
+        response = requests.post(self.create_uncertain_pairs_file_url)
+
+        if response.status_code == requests.codes.ok:
+            messagebox.showinfo("Information", "The uncertain pairs file was created!")
+        else:
+            messagebox.showerror("Error", "Cannot create the uncertain pairs file!")
+
     def get_uncertain_pairs_file(self):
         """
             This function makes a GET request in order to get the uncertain pairs file.
@@ -288,7 +303,7 @@ class TrainingFileView(Frame):
             :return: an object which represents the response of the request.
         """
 
-        response = requests.get(self.uncertain_pairs_url, stream=True)
+        response = requests.get(self.get_uncertain_pairs_file_url, stream=True)
 
         return response.content
 
@@ -392,7 +407,7 @@ class ResultsView(Frame):
                         print(str(field) + ": " + str(value))
                     print("\n")
                 print("\n")
-            
+
         else:
             print("No data has been found for your search.")
 
