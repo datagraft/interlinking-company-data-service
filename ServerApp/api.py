@@ -124,6 +124,8 @@ def create_uncertain_pairs_file():
 
     backbone.execute_jupyter_notebook_cells(idx_first_cell=0, idx_last_cell=20)
 
+    return "Uncertain pairs file created successfully"
+
 
 @app.route('/search/company/legal_name/<legal_name>', methods=['GET'])
 def search_by_legal_name(legal_name):
@@ -211,7 +213,7 @@ def uploaded_file(filename):
     :param filename: string object that contains the name of the file to be
                      downloaded
     """
-    return send_from_directory(secure_filename(filename)
+    return send_from_directory(os.getcwd(), secure_filename(filename))
 
 
 if __name__ == '__main__':
