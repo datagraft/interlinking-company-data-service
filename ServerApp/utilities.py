@@ -12,7 +12,7 @@ def search_field_in_db_by_value(info_db, field, value):
     is extracted from the database, for all the returned rows the function
     looks at their 'cluster_id' values and extracts the rows (from the other tables)
     which have that 'cluster_id' value and were not previously extracted, i.e., searches
-    for companies that are in the same cluster as the one previouslyextracted. Then, after
+    for companies that are in the same cluster as the one previously extracted. Then, after
     the 2nd extraction is finished, the function deletes some fields that are meant
     to be used internally and should not be shown to the user, and then returns the final
     result as a dictionary where its keys are the table names and the values are lists
