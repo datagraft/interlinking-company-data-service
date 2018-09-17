@@ -386,11 +386,13 @@ class ResultsView(Frame):
         """
         if result:
             for key, values in result.items():
-                print(key)
+                print("From provider " + key + "\n")
                 for example in values:
                     for field, value in example.items():
                         print(str(field) + ": " + str(value))
+                    print("\n")
                 print("\n")
+            
         else:
             print("No data has been found for your search.")
 

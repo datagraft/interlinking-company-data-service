@@ -92,7 +92,7 @@ def create_uncertain_pairs_file():
 
 
 @app.route('/search/company/legal_name/<legal_name>', methods=['GET'])
-def search_by_company_name(legal_name):
+def search_by_legal_name(legal_name):
     # object that will do all the work
     backbone = Backbone()
 
@@ -100,7 +100,7 @@ def search_by_company_name(legal_name):
 
 
 @app.route('/search/company/thoroughfare/<thoroughfare>', methods=['GET'])
-def search_by_company_name(thoroughfare):
+def search_by_thoroughfare(thoroughfare):
     # object that will do all the work
     backbone = Backbone()
 
