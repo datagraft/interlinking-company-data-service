@@ -1,0 +1,42 @@
+{
+    "input_file_1": "file1.csv",
+    "provider_1_name": "provider1",
+    "input_file_2": null,
+    "provider_2_name": null,
+    "jurisdiction": "no",
+    "training": {
+        "nr_of_examples_for_training": 500,
+        "field_definitions": [
+            {
+                "field": "name",
+                "type": "String"
+            },
+            {
+                "field": "address",
+                "type": "String"
+            },
+            {
+                "field": "id",
+                "type": "String"
+            }
+        ],
+        "create_training_file_by_client" : false,
+        "training_file": "training_file.json",
+        "settings_file": null
+    },
+    "threshold": null,
+    "compute_threshold": {
+        "recall_weight": 32,
+        "nr_of_sample_data_for_threshold": 500
+    },
+    "database_config": {
+        "database_name": "db_name",
+        "username": "user",
+        "password": "pass",
+        "host": "0.0.0.0",
+        "port": 5432
+    },
+    "evaluation": {
+        "label_column_name": "id"
+    }
+}
