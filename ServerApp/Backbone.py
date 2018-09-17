@@ -167,5 +167,5 @@ class Backbone:
             result = self.jupyter_notebook_data["cells"][idx_cell]["source"]
             exec(''.join(result), locals())
 
-    def search_company_by_name_and_return_serialized_result(self, company_name):
-        return pickle.dumps(utilities.search_company_by_name(self.data_from_config_file['database_config'], company_name))
+    def search_field_in_db_by_value_and_return_serialized_result(self, field, value):
+        return pickle.dumps(utilities.search_field_in_db_by_value(self.data_from_config_file['database_config'], field, value))
