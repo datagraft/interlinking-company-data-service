@@ -246,6 +246,7 @@ class TrainingFileView(Frame):
 class ResultsView(Frame):
 
     companies_url = "http://localhost:5000/search/company/name/"
+    combobox_values = ("legal_name","thoroughfare")
 
     def __init__(self, master):
         """Constructor"""
@@ -264,7 +265,7 @@ class ResultsView(Frame):
         ##################################################################### TODO get selected box
 
         self.combo_searching_options = Combobox(self, state="readonly")
-        self.combo_searching_options['values'] = ("Name",)
+        self.combo_searching_options['values'] = self.combobox_values
         self.combo_searching_options.pack()
 
         self.label_input = Label(self, text="Entry the value")
@@ -300,13 +301,15 @@ class ResultsView(Frame):
         self.text_area.yview(END)
 
     def print_results(self, result):
-
-        for key, values in result.items():
-            print(key)
-            for example in values:
-                for field, value in example.items():
-                    print(str(field) + ": " + str(value))
-            print("\n")
+        if result:
+            for key, values in result.items():
+                print(key)
+                for example in values:
+                    for field, value in example.items():
+                        print(str(field) + ": " + str(value))
+                print("\n")
+        else:
+            print("No data has been found for your search.")
 
 
 def main():
