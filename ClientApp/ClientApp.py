@@ -11,6 +11,10 @@ import pickle
 from console_label import ConsoleLabel
 from io import BytesIO
 
+if os.getenv('HTTP_HOST'):
+    root_url = os.getenv('HTTP_HOST')
+else:
+    root_url = 'http://localhost:5000'
 
 class ClientApp(Tk):
 
@@ -35,7 +39,7 @@ class ClientApp(Tk):
 
 
 class MainView(Frame):
-    run_algorithm_url = 'http://localhost:5000/run_algorithm'
+    run_algorithm_url = root_url + '/run_algorithm'
 
     def __init__(self, master):
         """
@@ -102,7 +106,7 @@ class MainView(Frame):
 
 
 class UploadFileView(Frame):
-    upload_url = 'http://localhost:5000/upload'
+    upload_url = root_url + '/upload'
 
     def __init__(self, master):
         """
@@ -136,36 +140,50 @@ class UploadFileView(Frame):
 
     def __set_full_path_of_file(self, value):
         """
-            TODO in case of misunderstanding change it Andrei
-            This function sets the path where to upload different files.
+            This function sets the absolute path of the file that the user
+            wants to upload to the server
 
-
-            :param value: path where to upload files.
+            :param value: absolute path of the file to be uploaded
         """
         self.full_path_of_file = value
 
     def on_open(self):
         """
-             TODO comment Andrei
+        This function is called when the 'Select file' button is pressed. The function
+        opens a file dialog, where the user can browse the file system and select a file.
+        After the user selected a file and opened it, the function displays in a label
+        the file name and stores in instance variables the full path of the file and its
+        name
         """
 
         ftypes = [('CSV', '.csv'), ('JSON', '.json'), ('All files', '*')]
         dlg = filedialog.Open(self, filetypes=ftypes)
-        fl = dlg.show()
 
-        if fl:
-            file_name = fl.split('/')[len(fl.split('/')) - 1]
+        absolute_file_path = dlg.show()
+        
+        if absolute_file_path:
+            # extract the file name from the absolute path
+            file_name = absolute_file_path.split('/')[len(absolute_file_path.split('/')) - 1]
+            
+            # update the label text
             self.selected_file_name.configure(text=file_name)
 
-            self.full_path_of_file = fl
+            self.__set_full_path_of_file(absolute_file_path)
         else:
+            # update the label text
             self.selected_file_name.configure(text="<Selected file name>")
+
             self.__set_full_path_of_file(None)
 
     def upload_file(self):
         """
-             TODO comment Andrei
+            This function is called when the 'Upload file' button was pressed.
+            It makes a POST request for uploading the previously selected file
+            and updates the label to '<Selected file name>' and also
+            updates the 'full_path_of_file' instance variable to 
+            'None', if the file was successfully uploaded 
         """
+        
         try:
             with open(self.full_path_of_file, 'rb') as f:
                 r = requests.post(self.upload_url, files={'file': f})
@@ -177,9 +195,14 @@ class UploadFileView(Frame):
                 messagebox.showinfo("Information", "File uploaded successfully!")
             else:
                 messagebox.showerror("Error", "Could not upload file")
-        except AttributeError as error:
-            # this exception is raised when the upload was pressed but
-            # no file was selected
+        except AttributeError:
+            # this exceptions is raised when the 'Upload file' button was pressed but
+            # no file was previously selected
+            pass
+        except TypeError:
+            # this exceptions is raised when the 'Upload file' button was pressed 
+            # after the user already uploaded a file. Now a new file shoud be selected
+            # and uploaded or just go Back to the main menu
             pass
 
     def go_back(self):
@@ -207,9 +230,9 @@ class RedirectOutputText:
 
 
 class TrainingFileView(Frame):
-    create_uncertain_pairs_file_url = 'http://localhost:5000/create_uncertain_pairs_file'
-    get_uncertain_pairs_file_url = 'http://localhost:5000/files/uncertain_pairs_file'
-    upload_url = 'http://localhost:5000/upload'
+    create_uncertain_pairs_file_url = root_url + '/create_uncertain_pairs_file'
+    get_uncertain_pairs_file_url = root_url + '/files/uncertain_pairs_file'
+    upload_url = root_url + '/upload'
 
     def __init__(self, master):
         """Constructor"""
@@ -271,7 +294,7 @@ class TrainingFileView(Frame):
         if user_input not in valid_responses:
             return
 
-        self.console_label.label_record_pair(user_input, [self.current_record_pair])
+        self.console_label.label_record_pair(user_input, self.current_record_pair)
 
         if user_input == 'f':
             self.upload_training_file()
@@ -291,10 +314,8 @@ class TrainingFileView(Frame):
 
         response = requests.post(self.create_uncertain_pairs_file_url)
 
-        if response.status_code == requests.codes.ok:
-            messagebox.showinfo("Information", "The uncertain pairs file was created!")
-        else:
-            messagebox.showerror("Error", "Cannot create the uncertain pairs file!")
+        if response.status_code != requests.codes.ok:
+            messagebox.showerror("Error", "The uncertain pairs file could not be created!")
 
     def get_uncertain_pairs_file(self):
         """
@@ -322,7 +343,7 @@ class TrainingFileView(Frame):
 
 
 class ResultsView(Frame):
-    companies_url = "http://localhost:5000/search/company/"
+    companies_url = root_url + "/search/company/"
     combobox_values = ("legal_name", "thoroughfare")
 
     def __init__(self, master):
