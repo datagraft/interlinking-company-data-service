@@ -271,7 +271,7 @@ class TrainingFileView(Frame):
         if user_input not in valid_responses:
             return
 
-        self.console_label.label_record_pair(user_input, self.current_record_pair)
+        self.console_label.label_record_pair(user_input, [self.current_record_pair])
 
         if user_input == 'f':
             self.upload_training_file()
