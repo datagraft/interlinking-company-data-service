@@ -15,6 +15,7 @@ class ConsoleLabel:
         buff = BytesIO(uncertain_pairs_stream)
 
         self.uncertain_pairs = pickle.load(buff)
+        print(self.uncertain_pairs)
 
     def get_uncertain_pair(self):
         """
@@ -35,16 +36,15 @@ class ConsoleLabel:
         """
             This function prints the uncertain pair in a pretty way.
 
-            :param record_pair:  a list object containing two dictionaries which represents the examples considered
+            :param record_pair:  a tuple object containing two dictionaries which represents the examples considered
                                 by library to be uncertain to label.
         """
-
-        for pair in record_pair:
-            for example in pair:
-                for field in example:
-                    line = "%s : %s" % (field, example[field])
-                    print(line)
-                print("\n")
+        
+        for pair_element in record_pair:
+            for field in pair_element:
+                line = "%s : %s" % (field, pair_element[field])
+                print(line)
+            print("\n")
 
         n_match = len(self.labeled_examples['match'])
         n_distinct = len(self.labeled_examples['distinct'])
