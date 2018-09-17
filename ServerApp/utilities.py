@@ -3,7 +3,27 @@ import psycopg2.extras
 import pandas as pd
 import numpy as np
 
-def search_company_by_name(info_db, company_name):
+def search_field_in_db_by_value(info_db, field, value):
+    """
+    This function searches in all the tables, that contain datasets from providers,
+    for a 'value' of a given 'field'. The 'value' doesn't need to have a
+    one-to-one match, but it can also be a substring. After a preliminary result
+    is extracted from the database, for all the returned rows the function
+    looks at their 'cluster_id' values and extracts the rows (from the other tables)
+    which have that 'cluster_id' value and were not previously extracted, i.e., searches
+    for companies that are in the same cluster as the one previouslyextracted. Then, after
+    the 2nd extraction is finished, the function deletes some fields that are meant
+    to be used internally and should not be shown to the user, and then returns the final
+    result as a dictionary where its keys are the table names and the values are lists
+    whose elements are entire rows extracted from that table.
+
+     Input: 'info_db' - dictionary containing the database parameters needed
+                       for creating a connection; the dictionary is the one
+                       given in the configuration file
+           'field' - string object containing the field name
+           'value' - string object that contains the value that we want to find
+                     in that field
+    """
     # create database connection
     db_connection = create_database_connection(info_db)
     db_cursor = db_connection.cursor()
@@ -13,7 +33,7 @@ def search_company_by_name(info_db, company_name):
     tmp_result = {}
     for table_name in table_names:
 
-        db_cursor.execute("SELECT * FROM " + table_name + " WHERE legal_name ILIKE '%' || " + repr(company_name) + " || '%';")
+        db_cursor.execute("SELECT * FROM " + table_name + " WHERE " + field + " ILIKE '%' || " + repr(value) + " || '%';")
 
         for row in db_cursor:
             if tmp_result.get(table_name):
@@ -32,6 +52,7 @@ def search_company_by_name(info_db, company_name):
             cluster_id = row['cluster_id']
             
             for table_name in table_names:
+                
                 db_cursor.execute("SELECT * FROM " + table_name + " WHERE cluster_id = " + str(cluster_id) + ";")
 
                 for new_row in db_cursor:
@@ -94,7 +115,7 @@ def extract_rows_by_jurisdiction_from_table_and_return_as_df(info_db, table_name
     Input: 'info_db' - dictionary containing the database parameters needed
                        for creating a connection; the dictionary is the one
                        given in the configuration file
-           'table__name' - string object containing the table name from
+           'table_name' - string object containing the table name from
                                 where the query will extract rows
            'field_value' - string representation object that specifies on which jurisdiction 
                             the query is based on. It is used in the WHERE clause and that's why
