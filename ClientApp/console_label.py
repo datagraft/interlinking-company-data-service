@@ -50,7 +50,7 @@ class ConsoleLabel:
         print("{0}/10 positive, {1}/10 negative".format(n_match, n_distinct))
 
         print('Do these records refer to the same thing?')
-        print('(y)es / (n)o / (u)nsure / (f)inished')
+        print('(y)es / (n)o / (u)nsure / (f)inished\n')
 
     def label_record_pair(self, label, record_pair):
         """
