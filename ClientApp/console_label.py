@@ -1,6 +1,9 @@
 import pickle
 import simplejson as json
+import os
+
 from io import BytesIO
+
 
 
 class ConsoleLabel:
@@ -96,7 +99,7 @@ class ConsoleLabel:
             This function creates a json training file using the instance variable "labeled_examples".
         """
 
-        with open(self.training_file_name, "w") as fjson:
+        with open(os.getcwd() + "/" + self.training_file_name, "w") as fjson:
             json.dump(
                 self.labeled_examples,
                 fjson,
