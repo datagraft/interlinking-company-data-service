@@ -20,9 +20,9 @@ class ConsoleLabel:
         """
             This function returns an uncertain pair from a list of uncertain pairs.
 
-            :return: a list object containing two dictionaries which represents the examples considered by library
-                    to be uncertain to label. The library cannot figure out if these examples are the same or not, so it cannot
-                    give a certain label and therefore ask the user to give one.
+            :return: a tuple object containing two dictionaries which represents the examples considered by library
+                    to be uncertain to label. The library cannot figure out if these examples are the same or not,
+                    so it cannot give a certain label and therefore ask the user to give one.
         """
 
         record_pair = self.uncertain_pairs.pop()
@@ -54,13 +54,13 @@ class ConsoleLabel:
 
     def label_record_pair(self, label, record_pair):
         """
-            This function adds to an instance variable a record pair depending on its label. If the label is 'y'
-            then the record pair it will be added to "match" category, if the label is 'n' to "distinct" category,
-            if the label is 'u' then we ignore it and if the label is 'f' the labeling part is finished and a new
-            training file is created.
+            This function adds to an instance variable which represents a dictionary a record pair depending on its
+            label. If the label is 'y' then the record pair it will be added to "match" category, if the label is 'n'
+            it will be added to "distinct" category, if the label is 'u' then we ignore it and if the label is 'f'
+            the labeling part is finished and a new training file is created.
 
             :param label: string object which can contain only the 'y', 'n', 'u', 'f' values.
-            :param record_pair: a list object containing two dictionaries which represents the examples considered
+            :param record_pair: a tuple object containing two dictionaries which represents the examples considered
                                by library to be uncertain to label.
         """
 
