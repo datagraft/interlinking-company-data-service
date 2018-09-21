@@ -79,3 +79,7 @@ pip install simplejson
   * psycopg - [installation guide](http://initd.org/psycopg/docs/install.html)
 
 __The versions of the modules at the development time can be accessed__ [here](documentation_files/dev-time-module-versions.txt)
+
+## Documentation
+
+More detailed documentaion can be found in the wiki pages.
