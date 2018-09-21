@@ -78,4 +78,4 @@ pip install simplejson
   * PostgreSQL database - [installation guide](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
   * psycopg - [installation guide](http://initd.org/psycopg/docs/install.html)
 
-__The versions of the modules at the development time can be accessed__ [here](dev-time-module-versions.txt)
+__The versions of the modules at the development time can be accessed__ [here](documentation_files/dev-time-module-versions.txt)
