@@ -34,7 +34,7 @@ The client side is a desktop application where the user can:
 
 ### Server Application
 
-Run the *api.py* script from a terminal
+Run the *api.py* script in an IDE that supports Python or from a terminal like in the example below:
 
 ```
 python3 api.py
@@ -42,7 +42,7 @@ python3 api.py
 
 ### Client Application
 
-Run the *ClientApp.py* script from a terminal
+Run the *ClientApp.py* script in an IDE that supports Python or from a terminal like in the example below
 
 ```
 python3 ClientApp.py
@@ -52,28 +52,28 @@ python3 ClientApp.py
 
 To run only the instance matching algorithm, one needs to have Jupyter Notebook installed and open the *dedupe_interlinking_data.ipynb* file, that can be found in the ServerApp folder, with Jupyter.
 
-### Prerequisites
+## Prerequisites
 
-What things you need to install the software and how to install them
-
+* Jupyter notebook (needed only if the matching algorithm is to be run individually) - [intallation guide](https://jupyter.readthedocs.io/en/latest/install.html)
+* Python 3 - [installation guide](https://wiki.python.org/moin/BeginnersGuide/Download)
+* pandas (if Jupyter notebook and Anaconda are not installed) - [installation guide](https://pandas.pydata.org/pandas-docs/stable/install.html)
+* numPy (if Jupyter notebook and Anaconda are not installed) - [installation guide](https://docs.scipy.org/doc/numpy/user/install.html)
+* dedupe - Dedupe's GitHub page can be found [here](https://github.com/dedupeio/dedupe)
 ```
-Give examples
+pip install dedupe
 ```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+* unidecode (used in the instance matching algorithm for preprocessing data)
 ```
-Give the example
+pip install unidecode
 ```
-
-And repeat
-
+* simplejson (e.g.: used in the instance matching algorithm to read the JSON configuration file) 
 ```
-until finished
+pip install simplejson
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
+* flask - [installation guide](http://flask.pocoo.org/docs/0.12/installation/)
+* requests
+  * [official installation guide](http://docs.python-requests.org/en/master/user/install/)
+  * [stackoverflow installation guide](https://stackoverflow.com/questions/30362600/how-to-install-requests-module-in-python-3-4-instead-of-2-7)
+* Database:
+  * PostgreSQL database - [installation guide](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
+  * psycopg - [installation guide](http://initd.org/psycopg/docs/install.html)
