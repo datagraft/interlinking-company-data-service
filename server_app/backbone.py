@@ -149,6 +149,8 @@ class Backbone:
         self.config_data_for_dedupe['training']['training_file'] = self.training_file_name
         self.config_data_for_dedupe['training']['settings_file'] = self.settings_file_name
         self.config_data_for_dedupe['last_cluster_id'] = self.last_cluster_id_in_db
+
+        print(self.config_data_for_dedupe)
         
         # write Dedupe's configuration file that we've made to a JSON file 
         with open(self.configuration_file_name_for_dedupe, "w") as config_file_for_dedupe:

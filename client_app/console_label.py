@@ -5,7 +5,6 @@ import os
 from io import BytesIO
 
 
-
 class ConsoleLabel:
     training_file_name = "training_file.json"
 
@@ -41,7 +40,7 @@ class ConsoleLabel:
             :param record_pair:  a tuple object containing two dictionaries which represents the examples considered
                                 by library to be uncertain to label.
         """
-        
+
         for pair_element in record_pair:
             for field in pair_element:
                 line = "%s : %s" % (field, pair_element[field])

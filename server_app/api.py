@@ -5,7 +5,7 @@ import utilities
 from flask import Flask, flash, request, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 
-from Backbone import Backbone
+from backbone import Backbone
 
 app = Flask(__name__)
  
