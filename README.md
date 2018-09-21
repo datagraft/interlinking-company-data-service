@@ -42,15 +42,15 @@ python3 api.py
 
 ### Client Application
 
-Run the *ClientApp.py* script in an IDE that supports Python or from a terminal like in the example below
+Run the *client_app.py* script in an IDE that supports Python or from a terminal like in the example below
 
 ```
-python3 ClientApp.py
+python3 client_app.py
 ```
 
 ### Optional: Instance matching algorithm
 
-To run only the instance matching algorithm, one needs to have Jupyter Notebook installed and open the *dedupe_interlinking_data.ipynb* file, that can be found in the ServerApp folder, with Jupyter notebook.
+To run only the instance matching algorithm, one needs to have Jupyter Notebook installed and open the *dedupe_interlinking_data.ipynb* file, that can be found in the server_app folder, with Jupyter notebook.
 
 ## Prerequisites
 
