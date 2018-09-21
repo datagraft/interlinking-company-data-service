@@ -82,4 +82,4 @@ __The versions of the modules at the development time can be accessed__ [here](d
 
 ## Documentation
 
-More detailed documentaion can be found in the wiki pages.
+More detailed documentation can be found in the wiki pages.
