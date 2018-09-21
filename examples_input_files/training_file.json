@@ -1,0 +1,45 @@
+{
+  "distinct": [
+    {
+      "__class__": "tuple",
+      "__value__": [
+        {
+          "field_1": "value_1",
+          "field_2": "value_2"
+        },
+        {
+          "field_1": "value_3",
+          "field_2": "value_4"
+        }
+      ]
+    }
+  ],
+  "match": [
+    {
+      "__class__": "tuple",
+      "__value__": [
+        {
+          "field_1": "value_5",
+          "field_2": "value_6"
+        },
+        {
+          "field_1": "value_5",
+          "field_2": "value_6"
+        }
+      ]
+    },
+    {
+      "__class__": "tuple",
+      "__value__": [
+        {
+          "field_1": "value_7",
+          "field_2": "value_8"
+        },
+        {
+          "field_1": "value_7",
+          "field_2": "value_8"
+        }
+      ]
+    }
+  ]
+}
