@@ -50,7 +50,7 @@ python3 ClientApp.py
 
 ### Optional: Instance matching algorithm
 
-To run only the instance matching algorithm, one needs to have Jupyter Notebook installed and open the *dedupe_interlinking_data.ipynb* file, that can be found in the ServerApp folder, with Jupyter.
+To run only the instance matching algorithm, one needs to have Jupyter Notebook installed and open the *dedupe_interlinking_data.ipynb* file, that can be found in the ServerApp folder, with Jupyter notebook.
 
 ## Prerequisites
 
