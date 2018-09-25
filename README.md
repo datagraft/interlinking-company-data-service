@@ -6,7 +6,7 @@ The Backbone Application is a client-server application, based on a machine lear
 
 ### Instance matching algorithm
 
-The instance matching algorithm is used to match data about companies. It receives a configuration file and two input datasets (.csv files), each containing data about different companies, and tries to find and create links between two entities that refer to the same company. The 'links' are represented by clusters, i.e., if the algorithm matched two companies, they will be put in the same cluster. The output is represent by two .csv files, which are composed of the data that was in the input files and two new columns: 'cluster_id' (the id of the cluster the company was assigned to) and 'link_score' (score representing how similar that company is with the others that were assigned to the same cluster). 
+The instance matching algorithm is used to match data about companies. It receives a configuration file and two input datasets (.csv files), each containing data about different companies, and tries to find and create links between two entities that refer to the same company. The 'links' are represented by clusters, i.e., if the algorithm matched two companies, they will be put in the same cluster. The output is made of two .csv files, which are composed of the data that was in the input files and two new columns: 'cluster_id' (the id of the cluster the company was assigned to) and 'link_score' (score representing how similar that company is with the others that were assigned to the same cluster). 
 
 Notes: 
 * companies that do not match with other companies from the other dataset are assigned to their own cluster (a 1 element cluster)
@@ -77,6 +77,7 @@ pip install simplejson
 * Database:
   * PostgreSQL database - [installation guide](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
   * psycopg - [installation guide](http://initd.org/psycopg/docs/install.html)
+  * (OPTIONAL) pgAdmin - tool for managing and visualizing the postgreSQL database; download [here](https://www.pgadmin.org/download/)
 
 __The versions of the modules at the development time can be accessed__ [here](documentation_files/dev-time-module-versions.txt)
 
