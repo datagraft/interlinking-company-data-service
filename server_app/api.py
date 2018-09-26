@@ -122,7 +122,7 @@ def create_uncertain_pairs_file():
     if backbone.is_tmp_file_used():
         backbone.extract_data_from_db_and_create_second_input_dataset()
 
-    backbone.execute_jupyter_notebook_cells(idx_first_cell=0, idx_last_cell=21)
+    backbone.execute_jupyter_notebook_cells(idx_first_cell=0, idx_last_cell=20)
 
     return "Uncertain pairs file created successfully"
 
